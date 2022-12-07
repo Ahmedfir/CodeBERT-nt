@@ -20,7 +20,7 @@ def order_lines_from_pickle(predictions_file_project_name_tuple, intermediate_di
             return load_zipped_pickle(interm_pickle_file)
     assert isfile(predictions_file)
     normal_mutants_df = ListFileLocations.parse_raw(load_zipped_pickle(predictions_file)).to_mutants(
-        project_name, version)
+        project_name, version, exclude_matching=False, no_duplicates=False)
     result_df = order_lines_by_naturalness(normal_mutants_df, preds_per_token, fl_column)
     if intermediate_dir is not None:
         if not isdir(intermediate_dir):
