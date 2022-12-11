@@ -29,11 +29,12 @@ def order_lines_from_pickle(predictions_file_project_name_tuple, intermediate_di
     return result_df
 
 
-def order_lines_by_naturalness(predictions_df, preds_per_token=1, fl_column=FL_COLUMN):
-    predictions_df = predictions_df[predictions_df['rank'] <= preds_per_token]
+def order_lines_by_naturalness(predictions_df, preds_per_token=1, fl_column=FL_COLUMN, version='f'):
+    predictions_df = predictions_df[
+        (predictions_df['rank'] <= preds_per_token - 1) & (predictions_df['version'] == version)]
     predictions_df[fl_column] = predictions_df['file_path'] + predictions_df['line'].astype(str)
     line_score_column = str(preds_per_token) + 'score_min'
-    result_df = predictions_df.groupby(['proj_bug_id', fl_column, 'version']).apply(
+    result_df = predictions_df.groupby(['proj_bug_id', fl_column, 'file_path', 'line']).apply(
         lambda x: pd.Series({line_score_column: x['score'].min()})).reset_index()
     result_df.sort_values(by=[line_score_column], inplace=True)
     return result_df
