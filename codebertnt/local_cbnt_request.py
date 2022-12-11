@@ -46,7 +46,10 @@ class LocalPredictBusinessLocations(BusinessLocationsRequest):
             cbm = CodeBertMlmFillMask()
             if self.force_reload or not self.has_any_output():
                 if not isdir(self.preds_output_dir):
-                    makedirs(self.preds_output_dir)
+                    try:
+                        makedirs(self.preds_output_dir)
+                    except FileExistsError:
+                        log.debug("two threads created the directory concurrently.")
                 results = predict_json_locs(locs_output_file, cbm, self.job_config)
             else:
                 results = predict_locs(self.get_file_locs(), cbm, self.job_config)

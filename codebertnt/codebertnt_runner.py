@@ -59,7 +59,10 @@ def create_request(repo_path, target, output_dir, class_files,
             raise AttributeError
     output_dir = join(expanduser(output_dir), target)
     if not isdir(output_dir):
-        os.makedirs(output_dir)
+        try:
+            os.makedirs(output_dir)
+        except FileExistsError:
+            log.debug("two threads created the directory concurrently.")
 
     return create_local_request(class_files, repo_path, output_dir,
                                 job_config, max_processes)

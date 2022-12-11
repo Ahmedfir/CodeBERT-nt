@@ -53,7 +53,10 @@ def print_project_issues(pickle_path):
         pid = project.name
         project_pickle_path = join(pickle_path, pid)
         if not isdir(project_pickle_path):
-            makedirs(project_pickle_path)
+            try:
+                makedirs(project_pickle_path)
+            except FileExistsError:
+                log.debug("two threads created the directory concurrently.")
         issue_trackers = IssueSystem.objects(project_id=project.id).all()
         for issue_tracker in issue_trackers:
             issues = Issue.objects(issue_system_id=issue_tracker.id).all()

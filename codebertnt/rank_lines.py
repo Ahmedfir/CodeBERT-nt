@@ -24,7 +24,10 @@ def order_lines_from_pickle(predictions_file_project_name_tuple, intermediate_di
     result_df = order_lines_by_naturalness(normal_mutants_df, preds_per_token, fl_column)
     if intermediate_dir is not None:
         if not isdir(intermediate_dir):
-            makedirs(intermediate_dir)
+            try:
+                makedirs(intermediate_dir)
+            except FileExistsError:
+                print("two threads created the directory concurrently.")
         save_zipped_pickle(result_df, interm_pickle_file)
     return result_df
 

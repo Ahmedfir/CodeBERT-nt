@@ -65,10 +65,16 @@ def create_cbnat_request(vcs_url: str, bid: str, v: Version, version: str, mbet_
     locs_output_dir = join(mbet_output_dir, version, bid)
     progress_file = join(mbet_output_dir, version, 'progress.csv')
     if not isdir(locs_output_dir):
-        makedirs(locs_output_dir)
+        try:
+            makedirs(locs_output_dir)
+        except FileExistsError:
+            log.debug("two threads created the directory concurrently.")
     preds_dir = join(preds_output_dir, version, bid)
     if not isdir(preds_dir):
-        makedirs(preds_dir)
+        try:
+            makedirs(preds_dir)
+        except FileExistsError:
+            log.debug("two threads created the directory concurrently.")
     proj_repo_path = get_repo_path(repos_dir, version, bid)
     # filtering any eventual test class.
 

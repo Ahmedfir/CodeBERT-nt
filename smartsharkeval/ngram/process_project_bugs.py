@@ -57,7 +57,10 @@ def create_tunafl_request(vcs_url: str, bid: str, v: Version, version: str, outp
     locs_output_dir = join(output_dir, version, bid)
     progress_file = join(output_dir, version, 'progress.csv')
     if not isdir(locs_output_dir):
-        makedirs(locs_output_dir)
+        try:
+            makedirs(locs_output_dir)
+        except FileExistsError:
+            log.debug("two threads created the directory concurrently.")
 
     proj_repo_path = get_repo_path(repos_dir, version, bid)
     # filtering any eventual test class.
