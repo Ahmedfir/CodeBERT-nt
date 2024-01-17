@@ -8,7 +8,7 @@ from pathlib import Path
 from pandas import DataFrame
 
 from cb import CodeBertMlmFillMask, predict_json_locs, PREDICTIONS_FILE_NAME, ListFileLocations, \
-    predict_locs
+    predict_locs, MAX_BATCH_SIZE
 from cb.job_config import DEFAULT_JOB_CONFIG
 from codebertnt.locs_request import RemoteBusinessLocationsRequest
 from codebertnt.rank_lines import order_lines_from_pickle, FL_COLUMN
@@ -53,7 +53,7 @@ class RemotePredictBusinessLocations(RemoteBusinessLocationsRequest):
                         log.debug("two threads created the directory concurrently.")
                 results = predict_json_locs(locs_output_file, cbm, self.job_config)
             else:
-                results = predict_locs(self.get_file_locs(), cbm, self.job_config)
+                results = predict_locs(self.get_file_locs(), cbm, self.job_config, batch_size=MAX_BATCH_SIZE)
             json = results.json()
             save_zipped_pickle(json, self.pickle_file)
         if isdir(self.repo_path):
