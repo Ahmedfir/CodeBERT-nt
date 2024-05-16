@@ -8,7 +8,7 @@ from utils.cmd_utils import shellCallTemplate
 from utils.file_search import contains
 from utils.git_utils import clone_checkout
 
-BUSINESS_LOCATIONS_JAR = join(Path(__file__).parent, 'business-locs/javabusinesslocs-1.1.0-SNAPSHOT-jar-with-dependencies.jar')
+BUSINESS_LOCATIONS_JAR = join(Path(__file__).parent, 'business-locs/javabusinesslocs-1.2.0-SNAPSHOT-jar-with-dependencies.jar')
 LOCATIONS_FILE_NAME = 'locations.json'
 MUTANTS_OUTPUT_CSV = 'mutants_output.csv'
 
