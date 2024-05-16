@@ -50,9 +50,9 @@ class LocalPredictBusinessLocations(BusinessLocationsRequest):
                         makedirs(self.preds_output_dir)
                     except FileExistsError:
                         log.debug("two threads created the directory concurrently.")
-                results = predict_json_locs(locs_output_file, cbm, self.job_config)
+                results = predict_json_locs(locs_output_file, cbm, self.job_config, repo_dir=self.repo_path)
             else:
-                results = predict_locs(self.get_file_locs(), cbm, self.job_config, batch_size=MAX_BATCH_SIZE)
+                results = predict_locs(self.get_file_locs(), cbm, self.job_config, batch_size=MAX_BATCH_SIZE, repo_dir=self.repo_path)
             json = results.json()
             save_zipped_pickle(json, self.pickle_file)
 
